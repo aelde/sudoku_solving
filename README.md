@@ -1,16 +1,16 @@
 # Grab Clone Mobile App
 
-This repository contains a fresh Expo + React Native codebase that prototypes a Grab-like super-app experience. It provides feature-focused screens for ride hailing, food delivery, parcel tracking, wallet management, and profile management. The goal is to offer a clean starting point for building a modern mobility and delivery application.
+This repository contains a refreshed Expo + React Native codebase that prototypes a Grab-like super-app experience. It provides feature-focused screens for ride hailing, food delivery, parcel tracking, wallet management, and profile management, all powered by a shared application context. The goal is to offer a clean starting point for building a modern mobility and delivery application.
 
 ## Features
 
-- **Multi-service home screen** with active ride summary, quick actions, and dynamic location messaging.
-- **Ride booking flow** showcasing vehicle category selection and confirmation call to action.
-- **Delivery dashboard** with parcel tracking card and nearby food recommendations.
-- **Wallet management** displaying GrabPay balance with top-up and transfer shortcuts.
-- **Profile area** placeholder for future account settings.
-- **Shared theming system** for consistent colors, spacing, and typography values across components.
-- **Reusable UI components** such as buttons, information cards, and service shortcuts to speed up feature delivery.
+- **Multi-service home screen** with active ride summary, quick services grid, personalised promotions, and dynamic location messaging.
+- **Ride planning flow** that captures pickup/drop-off details, highlights vehicle categories, and schedules future trips through shared state.
+- **Delivery dashboard** with parcel tracking, live courier updates, and suggested deals surfaced from the application context.
+- **Wallet management** surface showing real-time balance, membership rewards, quick actions, and recent transactions.
+- **Profile centre** featuring avatar, membership stats, earned badges, and contact information cards.
+- **Shared theming and context** layers that keep colors, spacing, typography, and mock data consistent across screens.
+- **Reusable UI components** such as buttons, information cards, section headers, and service shortcuts to speed up feature delivery.
 
 ## Tech Stack
 
@@ -48,11 +48,14 @@ This repository contains a fresh Expo + React Native codebase that prototypes a 
 ├── assets/
 ├── src/
 │   ├── components/
+│   ├── context/
+│   ├── data/
 │   ├── hooks/
 │   ├── navigation/
 │   ├── screens/
-│   ├── services/
-│   └── theme/
+│   ├── theme/
+│   ├── types/
+│   └── utils/
 ├── index.js
 ├── package.json
 ├── tsconfig.json

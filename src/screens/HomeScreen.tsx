@@ -1,23 +1,24 @@
 import React from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import InformationCard from '@components/InformationCard';
-import PrimaryButton from '@components/PrimaryButton';
 import ServiceShortcut from '@components/ServiceShortcut';
+import SectionHeader from '@components/SectionHeader';
+import UpcomingRideCard from '@components/UpcomingRideCard';
 import { useTheme } from '@theme/index';
-import { getActiveRide } from '@services/rideService';
 import { useMockLocation } from '@hooks/useMockLocation';
+import { useAppContext } from '@context/AppContext';
 
 const HomeScreen: React.FC = () => {
   const { colors, spacing, typography } = useTheme();
   const location = useMockLocation();
-  const activeRide = getActiveRide();
+  const { user, services, activeRide, promotions, upcomingRides } = useAppContext();
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.background
     },
-    greeting: {
+    content: {
       padding: spacing.lg
     },
     greetingText: {
@@ -30,46 +31,88 @@ const HomeScreen: React.FC = () => {
       color: colors.textSecondary,
       fontSize: typography.body
     },
-    shortcutsRow: {
+    shortcutsGrid: {
       flexDirection: 'row',
-      paddingHorizontal: spacing.lg,
-      marginBottom: spacing.lg
+      flexWrap: 'wrap',
+      marginHorizontal: -spacing.xs,
+      marginTop: spacing.sm
     },
-    sectionTitle: {
-      fontSize: typography.heading2,
-      fontWeight: '700',
-      color: colors.text,
-      paddingHorizontal: spacing.lg,
-      marginBottom: spacing.sm
+    shortcut: {
+      flexBasis: '48%',
+      marginHorizontal: spacing.xs,
+      marginBottom: spacing.md
     },
-    activeRideSubtitle: {
-      color: colors.textSecondary,
+    promotionCard: {
       marginBottom: spacing.md
     }
   });
 
+  const firstName = user.name.split(' ')[0];
+
   return (
     <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
-      <View style={styles.greeting}>
-        <Text style={styles.greetingText}>Hello, Nurul</Text>
+      <View style={styles.content}>
+        <Text style={styles.greetingText}>Hello, {firstName}</Text>
         <Text style={styles.subGreeting}>
-          {location ? `You are at ${location.address}` : 'Detecting your location...'}
+          {location ? `You are near ${location.address}` : 'Detecting your location...'}
         </Text>
-      </View>
 
-      <Text style={styles.sectionTitle}>Continue your journey</Text>
-      <InformationCard
-        title={`${activeRide.pickup} → ${activeRide.destination}`}
-        subtitle={`${activeRide.eta}\nDriver: ${activeRide.driver}`}
-        rightContent={<PrimaryButton label="Open Ride" onPress={() => {}} />}
-        style={{ marginHorizontal: spacing.lg }}
-      />
+        <SectionHeader title="Continue your journey" subtitle="Pick up where you left off" style={{ marginTop: spacing.lg }} />
+        {activeRide ? (
+          <UpcomingRideCard
+            ride={activeRide}
+            actionLabel="View driver details"
+            onPressAction={() => {}}
+            style={{ marginBottom: spacing.lg }}
+          />
+        ) : (
+          <InformationCard
+            title="No active rides"
+            subtitle="Book a ride or delivery to see live updates here"
+            style={{ marginBottom: spacing.lg }}
+          />
+        )}
 
-      <Text style={[styles.sectionTitle, styles.activeRideSubtitle]}>Quick actions</Text>
-      <View style={styles.shortcutsRow}>
-        <ServiceShortcut title="Book a Ride" description="GrabCar, GrabBike" />
-        <ServiceShortcut title="Order Food" description="GrabFood delivery" />
-        <ServiceShortcut title="Send Parcel" description="Same-day delivery" />
+        <SectionHeader
+          title="Quick services"
+          subtitle="Access your most-used Grab features"
+          actionLabel="Manage"
+          onPressAction={() => {}}
+        />
+        <View style={styles.shortcutsGrid}>
+          {services.map((service) => (
+            <ServiceShortcut
+              key={service.id}
+              title={service.title}
+              description={service.description}
+              iconName={service.iconName}
+              iconBackground={service.iconBackground}
+              iconColor={service.iconColor}
+              style={styles.shortcut}
+            />
+          ))}
+        </View>
+
+        <SectionHeader title="Upcoming rides" actionLabel="See all" onPressAction={() => {}} />
+        {upcomingRides.length ? (
+          upcomingRides.map((ride) => <UpcomingRideCard key={ride.id} ride={ride} />)
+        ) : (
+          <InformationCard
+            title="Plan your next ride"
+            subtitle="Schedule a ride ahead to skip the wait"
+            style={{ marginBottom: spacing.lg }}
+          />
+        )}
+
+        <SectionHeader title="Promotions for you" />
+        {promotions.map((promo) => (
+          <InformationCard
+            key={promo.id}
+            title={promo.title}
+            subtitle={`${promo.description}\nValid until ${promo.expiry}`}
+            style={styles.promotionCard}
+          />
+        ))}
       </View>
     </ScrollView>
   );

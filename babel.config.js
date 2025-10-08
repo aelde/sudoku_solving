@@ -10,9 +10,12 @@ module.exports = function (api) {
             '@components': './src/components',
             '@screens': './src/screens',
             '@navigation': './src/navigation',
-            '@services': './src/services',
             '@hooks': './src/hooks',
-            '@theme': './src/theme'
+            '@theme': './src/theme',
+            '@context': './src/context',
+            '@data': './src/data',
+            '@types': './src/types',
+            '@utils': './src/utils'
           }
         }
       ],
